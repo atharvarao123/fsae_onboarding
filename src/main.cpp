@@ -1,30 +1,7 @@
-#include <Arduino.h>
-#include <stdlib.h>
-#include <time.h>
-
-#define RAND_MAX 110
-#define RAND_MIN 1
-#define SAMPLE_WINDOW 5
-#define SENSOR_MIN 0
-#define SENSOR_MAX 100
 
 
-typedef struct sensordata{
-  int filtered_data;
-  int error;
-} sensordata;
+#include "main.h"
 
-typedef struct canformat{
-    int id;
-    byte msb;
-    byte lsb;
-    byte errorflag;
-} canformat;
-
-QueueHandle_t send_sensor;
-
-void sensor(void* paramaters);
-void can_task(void* parameters);
 
 /*
 Creates Two FreeRTOS tasks:
@@ -39,7 +16,6 @@ void setup() {
   send_sensor = xQueueCreate(5,sizeof(sensordata)); 
   xTaskCreate(sensor,"Sensor Task",2048,NULL,5,NULL);
   xTaskCreate(can_task,"Communication Protocol",2048,NULL,4,NULL);
-  vTaskStartScheduler();
 }
 
 
@@ -72,18 +48,16 @@ void sensor(void * parameters){
 
     filtered_data = sum/SAMPLE_WINDOW;
     sum = 0;
-
+    data.error = value_error;
+    data.filtered_data =filtered_data;
+    xQueueSend(send_sensor,&data,portMAX_DELAY);
     if(position == SAMPLE_WINDOW-1){
       position = 0;
-      data.error = value_error;
-      data.filtered_data = filtered_data;
-      // Queue used here
-      xQueueSend(send_sensor,&data,portMAX_DELAY);
     }
     else{
       position+=1;
     }
-    vTaskDelay(500/portTICK_PERIOD_MS);
+    vTaskDelay(10/portTICK_PERIOD_MS);
     value_error = 0;
   }
 } 
@@ -116,7 +90,7 @@ void can_task(void* paramaters){
       else{
         Serial.println("OK");
       }
-      vTaskDelay(1000/portTICK_PERIOD_MS);
+      
     }
   }
 

@@ -27,6 +27,8 @@ typedef struct canformat{
     byte errorflag;
 } canformat;
 
+QueueHandle_t send_sensor;
+
 /*
 Generates Random Noise for throttle percentage, applies moving average filter and sends data through queue
 */

@@ -16,12 +16,10 @@ It sends the data (filtered sensor value, error flag for out of range), and  pro
   
 4. Build & Run the project
 
-# CAN ID and Byte Layout
-
-CAN ID: 0x111
-Byte1: Most Significant Byte of the Sensor Value
-Byte0: Least Significant Byte of the Sensor Value
-Byte2: Error Code
+- **CAN ID:** 0x111  
+- **Byte 1:** Most Significant Byte of the Sensor Value  
+- **Byte 0:** Least Significant Byte of the Sensor Value  
+- **Byte 2:** Error Code
 
 Error Code:
 1 - Error Detected  (if raw throttle percentage is over 100 or less than 0)

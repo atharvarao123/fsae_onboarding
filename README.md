@@ -4,7 +4,7 @@
 
 The project generates random noise (throttle pressure) with a maximum value of 120 and a minimum of 0. 
 It then applies processing on the data, including out-of-range checks, and a moving average filter (with 5 samples). 
-It sends the data (filtered sensor value, error flag for out of range), and  proceeds to create a CAN frame contaning the filtered value, id num and the error flag which is printed out.
+It sends the data (filtered sensor value, error flag for out of range), and  proceeds to create a CAN frame containing the filtered value, id num and the error flag which is printed out.
 
 # How to Compile and run the FreeRTOS project
 
